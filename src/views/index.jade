@@ -1,0 +1,41 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  p.
+    dummy web-app with frontend & api (nodejs + mongoDB):
+    https://medium.com/@xoor/dockerizing-a-node-js-and-mongodb-app-f9d80fdb280e
+  ul 
+    li POST /data/into/db:
+    li $ curl -X POST -H "Content-type: application/json" http://localhost:3000/data/into/db -d '[ { "a": 1 }, { "b": 2 }, { "c": 3 } ]'
+    li > {"result":"success"}
+  ul
+    li GET /data/from/db
+    li $ curl http://localhost:3000/data/from/db
+    li > [{"_id":"57cbda4786941a000f572f31","a":1},{"_id":"57cbda4786941a000f572f32","b":2},{"_id":"57cbda4786941a000f572f33","c":3}]
+  p.
+    ###############
+    ##############
+  form(enctype="application/JSON" method="POST" action="/data/into/db")
+    div.input
+      span.label value1
+      input(type="text" name="values")
+      input(type="number" name="values")
+    div.input
+      span.label value2
+      input(type="text" name="values")
+      input(type="number" name="values")
+    div.input
+      span.label value3
+      input(type="text" name="values")
+      input(type="number" name="values")
+    div.actions
+      input(type="submit", value="add")
+  p Data from MongoDB:
+  p #{dataJSON}
+
+//tbody
+//each val in dataJSON
+//td= val.ImageID
+//li= index + ' : ' + val + ' : ' + val.ImageID
