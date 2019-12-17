@@ -1,18 +1,24 @@
+---
+# travis-ci build steps/configuration
 language: node_js
 
 services:
   - docker
 
 before_install:
-# ramp-up
-#- docker build -t dummy-app .
-#- docker run -p 3000:3000 -ti dummy-app &
-- docker-compose up --build --detach
-- docker ps -a
-# anderer quatsch
-- $(/sbin/ip route|awk '/default/ { print $3 }')
-- curl http://localhost:3000/data/from/db
-- curl -X POST -H "Content-type: application/json" http://localhost:3000/data/into/db -d '[ { "aa": 11 }, { "bb": 22 }, { "cc": 33 } ]'
-- curl http://localhost:3000/data/from/db
-# ramp-down
-- docker-compose down
+  # ramp-up
+  # - docker build -t dummy-app .
+  # - docker run -p 3000:3000 -ti dummy-app &
+  - docker-compose up --build --detach
+  - docker ps -a
+  # anderer quatsch
+  - $(/sbin/ip route|awk '/default/ { print $3 }')
+  - curl http://localhost:3000/data/from/db
+  - |
+    curl -X POST -H "Content-type: application/json"
+    http://localhost:3000/data/into/db
+    -d '[ { "aa":11 }, { "bb":22 }, { "cc":33 } ]'
+  - curl http://localhost:3000/data/from/db
+  - yamllint .travis.yaml
+  # ramp-down
+  - docker-compose down
