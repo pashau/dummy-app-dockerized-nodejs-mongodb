@@ -12,8 +12,12 @@ before_install:
   - docker-compose up --build --detach
   - docker ps -a
   # anderer quatsch
+  - ip route
+  - (ip route|awk '/default/ {print $3;exit;}')
+  - export HOST_IP="$(ip route|awk '/default/ {print $3;exit;}')"
   - |
-    export HOST_IP="$(ip route|awk '/default/ {print $3;exit;}')"
+    docker exec dockerized_nodejs_mongodb_app_web_1
+    /bin/sh -c "ip -4 route list match 0/0 | awk '{print $3" host.docker.internal"}' >> /etc/hosts"
   - curl http://$HOST_IP:3000/data/from/db
   - |
     curl -X POST -H "Content-type: application/json"
