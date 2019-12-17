@@ -12,11 +12,12 @@ before_install:
   - docker-compose up --build --detach
   - docker ps -a
   # anderer quatsch
-  - /sbin/ip route|awk '/default/ { print $3 }'
-  - curl http://localhost:3000/data/from/db
+  - |
+    ip=$(/sbin/ip route|awk '/default/ { print $3 }')
+  - curl http://$ip:3000/data/from/db
   - |
     curl -X POST -H "Content-type: application/json"
-    http://localhost:3000/data/into/db
+    http://$ip:3000/data/into/db
     -d '[ { "aa":11 }, { "bb":22 }, { "cc":33 } ]'
   - curl http://localhost:3000/data/from/db
   - yamllint .travis.yaml
