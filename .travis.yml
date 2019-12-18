@@ -15,6 +15,7 @@ before_install:
   - docker ps -a
   - ip route
   - (ip route|awk '/default/ {print $3;exit;}')
+  - netstat -tulpn
   - ls -la
   - sudo apt-get -y install tree
   - tree
@@ -27,7 +28,7 @@ install:
   # - docker run -d -p 127.0.0.1:3000:3000 --name dummy-app dummy-app
   # - docker run -p 3000:3000 -ti dummy-app &
   # - docker-compose up --build --detach
-
+  - sleep 15
 before_script:
   # prepare test:
   - docker ps
