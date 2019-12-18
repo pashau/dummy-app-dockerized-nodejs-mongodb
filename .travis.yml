@@ -5,25 +5,41 @@ language: node_js
 services:
   - docker
 
+addons:
+  hosts:
+    - localhost
+
 before_install:
-  # ramp-up
-  # - docker build -t dummy-app .
-  # - docker run -p 3000:3000 -ti dummy-app &
-  - docker-compose up --build --detach
+  # install java for jmeter tests:
+  # - java
   - docker ps -a
-  # anderer quatsch
   - ip route
   - (ip route|awk '/default/ {print $3;exit;}')
-  - export HOST_IP="$(ip route|awk '/default/ {print $3;exit;}')"
-  - |
-    docker exec dockerized_nodejs_mongodb_app_web_1
-    /bin/sh -c "ip -4 route list match 0/0 | awk '{print $3" host.docker.internal"}' >> /etc/hosts"
+  - yamllint .travis.yaml
+
+install:
+  - docker build -t dummy-app .
+    - docker run -d -p 3000:3000 --name dummy-app dummy-app
+  # - docker run -d -p 127.0.0.1:3000:3000 --name dummy-app dummy-app
+  # - docker run -p 3000:3000 -ti dummy-app &
+  # - docker-compose up --build --detach
+
+before_script:
+  # prepare test:
+  - docker ps
+  - curl http://localhost:3000/data/from/db
   - curl http://$HOST_IP:3000/data/from/db
   - |
     curl -X POST -H "Content-type: application/json"
     http://$HOST_IP:3000/data/into/db
     -d '[ { "aa":11 }, { "bb":22 }, { "cc":33 } ]'
   - curl http://$HOST_IP:3000/data/from/db
-  - yamllint .travis.yaml
-  # ramp-down
-  - docker-compose down
+
+
+script:
+  - docker ps -a | grep -q dummy-app
+  # - python tests.py (mvn verify -f jmeter-pom.xml -Dhost=localhost
+
+after_install:
+  - docker stop dummy-app
+  #- docker-compose down
