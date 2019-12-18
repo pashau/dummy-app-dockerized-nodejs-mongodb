@@ -19,7 +19,7 @@ before_install:
   - sudo apt-get -y install tree
   - tree
   - sudo apt-get -y install yamllint
-  - yamllint .travis.yaml
+  - yamllint .travis.yml
 
 install:
   - docker build -t dummy-app .
