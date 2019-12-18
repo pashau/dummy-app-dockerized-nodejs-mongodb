@@ -15,6 +15,9 @@ before_install:
   - docker ps -a
   - ip route
   - (ip route|awk '/default/ {print $3;exit;}')
+  - ls -la
+  - sudo apt-get -y install tree
+  - tree
   - sudo apt-get -y install yamllint
   - yamllint .travis.yaml
 
