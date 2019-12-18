@@ -23,7 +23,7 @@ before_install:
 
 install:
   - docker build -t dummy-app .
-  - docker run -d -p 3000:3000 --name dummy-app dummy-app --detach
+  - docker run -d -p 3000:3000 --name dummy-app dummy-app
   # - docker run -d -p 127.0.0.1:3000:3000 --name dummy-app dummy-app
   # - docker run -p 3000:3000 -ti dummy-app &
   # - docker-compose up --build --detach
