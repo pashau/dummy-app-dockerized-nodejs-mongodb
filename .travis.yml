@@ -36,8 +36,8 @@ before_script:
   - curl --help | grep data
   # - curl http://$HOST_IP:3000/data/from/db
   - |
-    curl -X POST -H "Content-type: application/json"
-    http://localhost:3000/data/into/db
+    curl -X POST -H "Content-type: application/json" \
+    http://localhost:3000/data/into/db \
     --data '[ { "d":4 }, { "e":5 }, { "f":6 } ]'
   # - curl http://$HOST_IP:3000/data/from/db
 
